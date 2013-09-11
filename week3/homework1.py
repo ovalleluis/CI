@@ -10,8 +10,18 @@ import pandas as pd
 import numpy as np
 
 import math
+import itertools
 
-def simulate(startdate, enddate, ls_symbols, weights):
+class Portafolio_Stats:
+  def __init__(self,std,avg,sharpe,cummulative_return):
+    self.std = std
+    self.avg = avg
+    self.sharpe = sharpe
+    self.cummulative_return = cummulative_return
+
+def get_stats(startdate, enddate, ls_symbols, weights):
+  
+    print weights
     
     # Start and End date of the charts
     dt_start = startdate
@@ -63,12 +73,59 @@ def simulate(startdate, enddate, ls_symbols, weights):
     avg = np.average(na_portrets)
     std = np.std(na_portrets)
     
+    sharpe = ((avg/std) * math.sqrt(252))
     
+    port_stats = Portafolio_Stats(std,avg,sharpe,cummulative_return)
+    
+    return port_stats       
+
+    
+    
+def get_allocations():     
+    weight_numbers = np.array(range(11)) 
+    
+    allocations = []
+    
+    for roll in itertools.product(weight_numbers, repeat = 4):
+        if sum(roll) == 10:
+            np_allocation = np.array(roll) / 10.0
+            allocations.append(np_allocation)
+            
+    return allocations   
+
+def find_optimal(startdate, enddate, ls_symbols):     
+  
+    sharpe_value = 0     
+    optimal = []
+
+    all_possible_allocations  = get_allocations()
+    
+    for x in all_possible_allocations:
+        candidate_sharpe = get_stats(startdate, enddate, ls_symbols, x).sharpe
+        if (candidate_sharpe > sharpe_value):
+            sharpe_value = candidate_sharpe
+            optimal = []
+            optimal.append(x)
+        elif (candidate_sharpe == sharpe_value):
+            optimal.append(x)
+            
+    return optimal
+
+def simulate(startdate, enddate, ls_symbols, weights):
+  
+    port_stats = get_stats(startdate, enddate, ls_symbols, weights)    
+ 
     print "Start Date:" 
     print "End Date:" 
-    print "Symbols:" 
-    print "Optimal Allocations:"
-    print "Sharpe Ratio:", ((avg/std) * math.sqrt(252))
-    print "Volatility (stdev of daily returns):  ",std
-    print "Average Daily Return:",avg
-    print "Cumulative Return:", cummulative_return 
+    print "Symbols:"     
+    print "Sharpe Ratio:",port_stats.sharpe
+    print "Volatility (stdev of daily returns):  ",port_stats.std
+    print "Average Daily Return:",port_stats.avg
+    print "Cumulative Return:", port_stats.cummulative_return 
+    print "Optimal Allocations:",find_optimal(startdate, enddate, ls_symbols)
+    
+        
+    
+            
+
+        
