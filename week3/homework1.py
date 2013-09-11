@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
+import math
+
 def simulate(startdate, enddate, ls_symbols, weights):
     
     # Start and End date of the charts
@@ -32,24 +34,32 @@ def simulate(startdate, enddate, ls_symbols, weights):
     # Timestamps and symbols are the ones that were specified before.
     ldf_data = c_dataobj.get_data(ldt_timestamps, ls_symbols, ls_keys)  
     d_data = dict(zip(ls_keys, ldf_data))
+    df_rets = d_data['close'].copy()
+       
+    df_rets = df_rets.fillna(method='ffill')
+    df_rets = df_rets.fillna(method='bfill')
+    df_rets = df_rets.fillna(1.0)    
     
-    # Getting the numpy ndarray of close prices.
-    na_price = d_data['close'].values
-    
-    
+    na_price = df_rets.values
     
     normalized_price = na_price / na_price[0:1] 
     
     # Copy the normalized prices to a new ndarry to find returns.
-    na_rets = normalized_price.copy()
-  
+    na_rets = normalized_price * weights 
+    
+    port_values = []    
+    for row in na_rets:
+        port_value = sum(row)
+        port_values.append(port_value)
+
+    na_portrets = np.array(port_values)
+    
+    cummulative_return = port_values[-1]
+
     # Calculate the daily returns of the prices. (Inplace calculation)
     # returnize0 works on ndarray and not dataframes.
-    tsu.returnize0(na_rets)    
-  
-    #numpy array containing weighted daily returns
-    na_portrets = np.sum(na_rets * weights, axis=1)
-    
+    tsu.returnize0(na_portrets)    
+ 
     avg = np.average(na_portrets)
     std = np.std(na_portrets)
     
@@ -58,7 +68,7 @@ def simulate(startdate, enddate, ls_symbols, weights):
     print "End Date:" 
     print "Symbols:" 
     print "Optimal Allocations:"
-    print "Sharpe Ratio:"
+    print "Sharpe Ratio:", ((avg/std) * math.sqrt(252))
     print "Volatility (stdev of daily returns):  ",std
     print "Average Daily Return:",avg
-    print "Cumulative Return:"  
+    print "Cumulative Return:", cummulative_return 
