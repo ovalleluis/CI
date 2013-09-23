@@ -96,7 +96,7 @@ def simulate(startdate, enddate, ls_symbols, weights):
     # Timestamps and symbols are the ones that were specified before.
     ldf_data = c_dataobj.get_data(ldt_timestamps, ls_symbols, ls_keys)  
     d_data = dict(zip(ls_keys, ldf_data))
-    df_rets = d_data['close']
+    df_rets = d_data['actual_close']
        
     df_rets = df_rets.fillna(method='ffill')
     df_rets = df_rets.fillna(method='bfill')
