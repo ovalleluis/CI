@@ -1,4 +1,4 @@
 CI
 ==
 
-Computing Investment 
+Computational Investing, Part I
