@@ -108,9 +108,9 @@ def simulate(startdate, enddate, ls_symbols, weights):
 
     port_stats = get_stats_core(normalized_price,weights)    
  
-    print "Start Date:" 
-    print "End Date:" 
-    print "Symbols:"     
+    print "Start Date:", startdate
+    print "End Date:", enddate
+    print "Symbols:",ls_symbols
     print "Sharpe Ratio:",port_stats.sharpe
     print "Volatility (stdev of daily returns):  ",port_stats.std
     print "Average Daily Return:",port_stats.avg
@@ -120,7 +120,7 @@ def simulate(startdate, enddate, ls_symbols, weights):
       pprint (vars(optimal))
 
 def main():
-    simulate(dt.datetime(2000, 1, 1), dt.datetime.now() , ["BME.MC", "REP.MC", "SAN.MC", "TEF.MC", "AMP.MC"] , [0.15, 0.2, 0.15, 0.27, 0.23])
+    simulate(dt.datetime(2009, 1, 1), dt.datetime.now() , ["TEF.MC", "SAN.MC", "REP.MC", "PSG.MC", "SUA.MC"] , [0.30, 0.17, 0.20, 0.32, 0.01])
     
         
     

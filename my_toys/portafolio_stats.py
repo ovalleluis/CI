@@ -86,13 +86,13 @@ def do_benchmark_calculations(start_date,end_date,ls_symbols):
 def main():
     capital = int(sys.argv[1])
     order_file = sys.argv[2]
-    value_output_file = sys.argv[3]
 
     ##symbols and dates are ordered
     dates_set, symbols_set = load_dates_and_symbols(order_file)
 
     start_date = dates_set[0]
     end_date = dates_set[len(dates_set)-1] + dt.timedelta(days=1)
+    end_date = dt.datetime.now()
 
     df_close = getData(start_date, end_date, symbols_set)['close']
     df_close = df_close.fillna(method='ffill')
@@ -117,19 +117,24 @@ def main():
      ##now we need a cummulative sum of df_trades to got holding matrix
     df_holding = df_trades.cumsum()
 
-    for x in df_holding:
-        print x
-
-    for x in df_holding.values:
-        print x
-
     df_portafolio_value = df_close * df_holding
+
+    print df_portafolio_value.tail(1)
+    print ""
+    print ""
+    print ""
+
     df_portafolio_value =  df_portafolio_value.sum(axis=1)+capital
 
-    for row_index in df_portafolio_value.index:
-        print row_index,"--",df_portafolio_value[row_index]
+    print df_portafolio_value.tail(10)
+    #for row_index in df_portafolio_value.index:
+        #print row_index,"--",df_portafolio_value[row_index]
+
+    print df_holding.tail(1),"\n"
+
 
     na_portafolio_value = df_portafolio_value.values
+    print ""
 
     tsu.returnize0(na_portafolio_value)
 

@@ -38,8 +38,8 @@ def getFrontier(na_data):
                             na_avgrets, s_type="long")
 
     # Getting the step size and list of returns to optimize for.
-    f_step = (f_max - f_min) / 100.0
-    lf_returns = [f_min + x * f_step for x in range(101)]
+    f_step = (f_max - f_min) / 1000000.0
+    lf_returns = [f_min + x * f_step for x in range(1000001)]
 
     # Declaring empty lists
     lf_std = []
@@ -59,7 +59,7 @@ def main():
     '''Main Function'''
 
     # S&P 100
-    ls_symbols = ['AAPL', 'ABT', 'ACN', 'AEP', 'ALL', 'AMGN', 'AMZN', 'APC', 'AXP', 'BA', 'BAC', 'BAX', 'BHI', 'BK', 'BMY', 'BRK.B', 'CAT', 'C', 'CL', 'CMCSA', 'COF', 'COP', 'COST', 'CPB', 'CSCO', 'CVS', 'CVX', 'DD', 'DELL', 'DIS', 'DOW', 'DVN', 'EBAY', 'EMC', 'EXC', 'F', 'FCX', 'FDX', 'GD', 'GE', 'GILD', 'GOOG', 'GS', 'HAL', 'HD', 'HNZ', 'HON', 'HPQ', 'IBM', 'INTC', 'JNJ', 'JPM', 'KFT', 'KO', 'LLY', 'LMT', 'LOW', 'MA', 'MCD', 'MDT', 'MET', 'MMM', 'MO', 'MON', 'MRK', 'MS', 'MSFT', 'NKE', 'NOV', 'NSC', 'NWSA', 'NYX', 'ORCL', 'OXY', 'PEP', 'PFE', 'PG', 'PM', 'QCOM', 'RF', 'RTN', 'SBUX', 'SLB', 'HSH', 'SO', 'SPG', 'T', 'TGT', 'TWX', 'TXN', 'UNH', 'UPS', 'USB', 'UTX', 'VZ', 'WAG', 'WFC', 'WMB', 'WMT', 'XOM']
+    ls_symbols = ['TEF.MC', 'IBCX.MU', 'IEGA.L', 'IDYV.L', 'IWDA.L']
 
     # Creating an object of the dataaccess class with Yahoo as the source.
     c_dataobj = da.DataAccess('Yahoo')
@@ -72,7 +72,7 @@ def main():
         ls_symbols.pop(i_index)
 
     # Start and End date of the charts
-    dt_end = dt.datetime(2010, 1, 1)
+    dt_end = dt.datetime(2013, 1, 1)
     dt_start = dt_end - dt.timedelta(days=365)
     dt_test = dt_end + dt.timedelta(days=365)
 
