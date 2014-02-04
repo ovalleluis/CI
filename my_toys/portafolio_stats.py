@@ -90,6 +90,8 @@ def main():
     ##symbols and dates are ordered
     dates_set, symbols_set = load_dates_and_symbols(order_file)
 
+    num_operations = len(dates_set)
+
     start_date = dates_set[0]
     end_date = dates_set[len(dates_set)-1] + dt.timedelta(days=1)
     end_date = dt.datetime.now()
@@ -134,7 +136,10 @@ def main():
 
 
     na_portafolio_value = df_portafolio_value.values
+    print "Num operations",num_operations," Total commissions:",(num_operations * -15)
+    print "Portafolio value less commissions",df_portafolio_value.tail(1)+ (num_operations * -15)
     print ""
+
 
     tsu.returnize0(na_portafolio_value)
 
